@@ -8,9 +8,10 @@ using namespace std;
 
 struct Context{
   vector<vector<char>> *data;
-  int &running_threads;
   pthread_mutex_t &running_mutex;
-  int threads_number;
+  int &running_threads;
+  int total_threads;
+  int sorting_column;
 };
 
 #endif
