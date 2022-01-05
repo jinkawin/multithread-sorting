@@ -5,15 +5,13 @@
 using namespace std;
 
 int main(){
-  // vector<vector<char> > data { {'1', 'H', 'P'}, {'A', 'Y', '6'}, {'F', '2', 'K'}, {'7', '8', 'L'}, {'R', 'I', 'N'}, {'X', 'U', '9'}};
-
-  vector<int> vectorData {7, 2, 6, 8, 1, 3, 5, 4};
+  vector<vector<char>> data {{'1', 'H', 'P'}, {'A', 'Y', '6'}, {'F', '2', 'K'}, {'7', '8', 'L'}, {'R', 'I', 'N'}, {'X', 'U', '9'}};
 
   SortVector sort;
-  sort.quickSort(vectorData, 0, 7);
-  sort.printVector(vectorData);
+  sort.quickSort(data, 0, 0, data.size()-1);
+  sort.printVector2D(data);
 
-  int data[] = {7, 2, 6, 8, 1, 3, 5, 4};
+  // sort.test(data);
 
   // int a = 1;
   // int& c = a;
