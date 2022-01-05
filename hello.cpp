@@ -1,17 +1,15 @@
 #include <iostream>
 #include <vector>
-#include "sort-vector.hpp"
+
+#include "sort.hpp"
 
 using namespace std;
 
 int main(){
   vector<vector<char>> data {{'1', 'H', 'P'}, {'A', 'Y', '6'}, {'F', '2', 'K'}, {'7', '8', 'L'}, {'R', 'I', 'N'}, {'X', 'U', '9'}};
 
-  SortVector sort;
-  sort.quickSort(data, 0, 0, data.size()-1);
-  sort.printVector2D(data);
-
-  // sort.test(data);
+  Sort::quick_sort(data, 1, 0, data.size()-1);
+  Sort::print_vector_2d(data);
 
   // int a = 1;
   // int& c = a;

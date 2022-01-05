@@ -1,4 +1,5 @@
 #include <vector>
+#include <pthread.h>
 
 using namespace std;
 
@@ -6,8 +7,10 @@ using namespace std;
 #define CONTEXT_HPP
 
 struct Context{
-  vector<vector<char> > *data;
-  int threadsNumber;
+  vector<vector<char>> *data;
+  int &running_threads;
+  pthread_mutex_t &running_mutex;
+  int threads_number;
 };
 
 #endif

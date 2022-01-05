@@ -6,39 +6,52 @@ using namespace std;
 class Sort {
 public:
 
-  void quickSort(int *arr, int low, int high){
+  static void quick_sort(vector<vector<char>> &data, int column, int low, int high) {
     if (low < high){
-      int mid = this->partition(arr, low, high);
+      int mid = partition(data, column, low, high);
 
-      quickSort(arr, low, mid - 1);
-      quickSort(arr, mid + 1, high);
+      quick_sort(data, column, low, mid - 1);
+      quick_sort(data, column, mid + 1, high);
     }
   }
 
-  void printArray(int arr[], int size){
-    int i;
-    for (i=0; i < size; i++)
-        printf("%d ", arr[i]);
-    printf("\n");
+  static void print_vector(vector<int> data){
+    for (const auto& elem : data) {
+      cout << elem <<  ", ";
+    }
+    cout << endl;
+  }
+
+  static void print_vector_2d(vector<vector<char>> data) {
+    for (const auto& row : data) {
+      for (const auto& elem : row) {
+        cout << elem <<  ", ";
+      }
+      cout << endl;
+    }
   }
 
 private:
-  int partition(int *arr, int low, int high){
-    int pivot = arr[high];
+  static int partition(vector<vector<char>> &data, int column, int low, int high) {
+    int pivot = data[high][column];
     int i = (low - 1);
 
     for (int j = low; j <= high- 1; j++){
-      if (arr[j] <= pivot){
-        swap(&arr[++i], &arr[j]);
+      if (data[j][column] <= pivot){
+        swap(data[++i], data[j]);
       }
     }
-    swap(&arr[++i], &arr[high]);
+    swap(data[++i], data[high]);
     return i;
   }
 
-  void swap(int* a, int* b){
-    int t = *a;
-    *a = *b;
-    *b = t;
+  static vector<char> getColumn(vector<vector<char>> &data, int column){
+    vector<char> result;
+
+    for (const auto& row : data) {
+      result.push_back(row[column]);
+    }
+
+    return result;
   }
 };
