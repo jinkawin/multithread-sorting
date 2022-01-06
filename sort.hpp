@@ -3,26 +3,29 @@
 
 using namespace std;
 
+#ifndef SORT_HPP
+#define SORT_HPP
+
 class Sort {
 public:
 
-  static void quick_sort(vector<vector<char>> &data, int column, int low, int high) {
+  static void quickSort(vector<vector<char>> &data, int column, int low, int high) {
     if (low < high){
       int mid = partition(data, column, low, high);
 
-      quick_sort(data, column, low, mid - 1);
-      quick_sort(data, column, mid + 1, high);
+      quickSort(data, column, low, mid - 1);
+      quickSort(data, column, mid + 1, high);
     }
   }
 
-  static void print_vector(vector<int> data){
+  static void printVector(vector<int> data){
     for (const auto& elem : data) {
       cout << elem <<  ", ";
     }
     cout << endl;
   }
 
-  static void print_vector_2d(vector<vector<char>> data) {
+  static void printVector2d(vector<vector<char>> data) {
     for (const auto& row : data) {
       for (const auto& elem : row) {
         cout << elem <<  ", ";
@@ -55,3 +58,5 @@ private:
     return result;
   }
 };
+
+#endif

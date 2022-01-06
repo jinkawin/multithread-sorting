@@ -5,11 +5,24 @@
 
 using namespace std;
 
+#include "context.hpp"
+#include "taskmanager.hpp"
+
 int main(){
   vector<vector<char>> data {{'1', 'H', 'P'}, {'A', 'Y', '6'}, {'F', '2', 'K'}, {'7', '8', 'L'}, {'R', 'I', 'N'}, {'X', 'U', '9'}};
+  vector<int> buckets_index;
 
-  Sort::quick_sort(data, 1, 0, data.size()-1);
-  Sort::print_vector_2d(data);
+  BucketContext context = {
+    &data,
+    &buckets_index,
+    3, // total threads
+    2 // sorting column
+  };
+
+  TaskManager::swapBucket(&context);
+
+  Sort::printVector2d(data);
+  Sort::printVector(buckets_index);
 
   // int a = 1;
   // int& c = a;

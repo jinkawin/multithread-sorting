@@ -2,7 +2,7 @@
 #include <thread>
 #include <vector>
 
-#include "task-manager.hpp"
+#include "taskmanager.hpp"
 #include "context.hpp"
 
 using namespace std;
@@ -18,7 +18,7 @@ int main() {
 
   // Local sorting (Multithread)
   for(int i = 0; i < total_threads; i++ ) {
-    Context context = {
+    SortContext context = {
       &data,
       running_mutex,
       running_threads,
@@ -27,8 +27,8 @@ int main() {
     };
 
     // Assign task to threads
-    int rc = pthread_create(&threads[i], NULL, TaskManager::local_sort, (void *)&context);
-    // int rc = pthread_create(&threads[i], NULL, TaskManager::swap_bucket, (void *)&context);
+    int rc = pthread_create(&threads[i], NULL, TaskManager::localSort, (void *)&context);
+    // int rc = pthread_create(&threads[i], NULL, TaskManager::swapBucket, (void *)&context);
 
     // Counting running threads
     pthread_mutex_lock(&running_mutex);
@@ -47,7 +47,7 @@ int main() {
   }
 
   cout << "All threads are finished!" << endl;
-  Sort::print_vector_2d(data);
+  Sort::printVector2d(data);
 
   pthread_exit(NULL);
 }
