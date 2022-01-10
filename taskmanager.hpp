@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <pthread.h>
+#include <thread>
 
 #include "context.hpp"
 #include "sort.hpp"
@@ -9,30 +10,41 @@ using namespace std;
 class TaskManager {
 private:
   static const char FIRST_CHAR = 'a';
-  static const int TOTAL_CHAR = 26; // a to z
-  inline static int counter = 0;
+  static const uint8_t TOTAL_CHAR = 26; // a to z
+  inline static uint8_t counter = 0;
 
 public:
-  static void *localSort(void *data) {
-    int thread_id = counter++;
-    SortContext *context = (struct SortContext*)data;
+  static void localSort(SortContext *context) {
+    pthread_t threads[context->total_threads];
 
-    /* Calculate calulation window */
-    vector<int> &buckets_index = *(context->buckets_index);
-    int start_idx = (thread_id ==  0) ? 0 : buckets_index[thread_id-1]+1;
-    int last_idx = buckets_index[thread_id];
+    for(int i = 0; i < context->total_threads; i++ ) {
+      // Assign task to threads
+      int rc = pthread_create(&threads[i], NULL, TaskManager::sort, (void *)context);
 
-    Sort::quickSort(*(context->data), context->sorting_column, start_idx, last_idx);
+      // Counting running threads
+      pthread_mutex_lock(&(context->running_mutex));
+      context->running_threads++;
+      pthread_mutex_unlock(&(context->running_mutex));
 
-    endThread(thread_id, context);
-    pthread_exit(NULL);
+      // If thread didn't work
+      if (rc) {
+        cout << "Error:unable to create thread," << rc << endl;
+        exit(-1);
+      }
+    }
+
+    // Wait all threads
+    while(context->running_threads > 0){
+      sleep(1);
+    }
   }
 
   static void swapBucket(BucketContext *context) {
     vector<vector<char>> &data = *(context->data);
     vector<int> &buckets_index = *(context->buckets_index);
+
     int column = context->sorting_column;
-    int characters_size = TOTAL_CHAR/(context->total_threads - 1);
+    uint8_t characters_size = TOTAL_CHAR/(context->total_threads - 1);
     int runner = 0;
 
     for(int i = 0; i < context->total_threads; i++) {
@@ -51,6 +63,22 @@ public:
   }
 
 private:
+  static void *sort(void *data) {
+    int thread_id = counter++;
+    SortContext *context = (struct SortContext*)data;
+
+    /* Calculate calulation window */
+    vector<int> &buckets_index = *(context->buckets_index);
+    int start_idx = (thread_id ==  0) ? 0 : buckets_index[thread_id-1]+1;
+    int last_idx = buckets_index[thread_id];
+
+    Sort::quickSort(*(context->data), context->sorting_column, start_idx, last_idx);
+
+    // Post-process
+    TaskManager::endThread(thread_id, context);
+    pthread_exit(NULL);
+  }
+
   static void endThread(int thread_id, SortContext *context) {
     // Discounting threads
     pthread_mutex_lock(&(context->running_mutex));

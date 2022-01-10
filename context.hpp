@@ -10,15 +10,15 @@ struct SortContext {
   vector<vector<char>> *data;
   vector<int> *buckets_index; //store the last array's index of each bucket
   pthread_mutex_t &running_mutex;
-  int &running_threads;
-  int total_threads;
+  volatile uint8_t &running_threads;
+  uint8_t total_threads;
   int sorting_column;
 };
 
 struct BucketContext {
   vector<vector<char>> *data;
   vector<int> *buckets_index; //store the last array's index of each bucket
-  int total_threads;
+  uint8_t total_threads;
   int sorting_column;
 };
 
