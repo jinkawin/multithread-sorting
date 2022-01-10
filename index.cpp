@@ -4,36 +4,21 @@
 
 #include "taskmanager.hpp"
 #include "context.hpp"
+#include "util.hpp"
 
 using namespace std;
 
-int main() {
-  int running_threads = 0;
-  int total_threads = 3;
-  int sorting_column = 0;
-  pthread_mutex_t running_mutex = PTHREAD_MUTEX_INITIALIZER;
-  pthread_t threads[total_threads];
+void localSort(SortContext *context) {
+  pthread_t threads[context->total_threads];
 
-  vector<vector<char>> data {{'1', 'H', 'P'}, {'A', 'Y', '6'}, {'F', '2', 'K'}, {'7', '8', 'L'}, {'R', 'I', 'N'}, {'X', 'U', '9'}};
-
-  // Local sorting (Multithread)
-  for(int i = 0; i < total_threads; i++ ) {
-    SortContext context = {
-      &data,
-      running_mutex,
-      running_threads,
-      total_threads,
-      sorting_column
-    };
-
+  for(int i = 0; i < context->total_threads; i++ ) {
     // Assign task to threads
-    int rc = pthread_create(&threads[i], NULL, TaskManager::localSort, (void *)&context);
-    // int rc = pthread_create(&threads[i], NULL, TaskManager::swapBucket, (void *)&context);
+    int rc = pthread_create(&threads[i], NULL, TaskManager::localSort, (void *)context);
 
     // Counting running threads
-    pthread_mutex_lock(&running_mutex);
-    running_threads++;
-    pthread_mutex_unlock(&running_mutex);
+    pthread_mutex_lock(&(context->running_mutex));
+    context->running_threads++;
+    pthread_mutex_unlock(&(context->running_mutex));
 
     // If thread didn't work
     if (rc) {
@@ -42,12 +27,49 @@ int main() {
     }
   }
 
-  while(running_threads > 0){
+  while(context->running_threads > 0){
     sleep(1);
   }
+}
+
+int main() {
+  int total_threads = 3;
+  int sorting_column = 2;
+  int running_threads = 0;
+  pthread_mutex_t running_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+  vector<vector<char>> data {{'a', 's', 'c'}, {'6', 'h', 'p'}, {'f', '3', 'x'}, {'n', 'r', '1'}, {'u', '9', 'j'}, {'t', 'i', '7'}};
+  vector<int> buckets_index;
+
+  int bucket_size = data.size() / total_threads;
+
+  // Initial Bucket index
+  for(int i = bucket_size-1; i < data.size(); i = i+bucket_size) {
+    buckets_index.push_back(i);
+  }
+
+  SortContext sortContext = {
+    &data,
+    &buckets_index,
+    running_mutex,
+    running_threads,
+    total_threads,
+    sorting_column
+  };
+  localSort(&sortContext);
+
+  BucketContext bucketContext = {
+    &data,
+    &buckets_index,
+    total_threads,
+    sorting_column
+  };
+  TaskManager::swapBucket(&bucketContext);
 
   cout << "All threads are finished!" << endl;
-  Sort::printVector2d(data);
+  Util::printVector2d(data);
 
   pthread_exit(NULL);
+
+  return 0;
 }

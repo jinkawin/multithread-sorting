@@ -1,15 +1,15 @@
 #include <iostream>
 #include <vector>
 
+#include "context.hpp"
+#include "taskmanager.hpp"
 #include "sort.hpp"
+#include "util.hpp"
 
 using namespace std;
 
-#include "context.hpp"
-#include "taskmanager.hpp"
-
 int main(){
-  vector<vector<char>> data {{'1', 'H', 'P'}, {'A', 'Y', '6'}, {'F', '2', 'K'}, {'7', '8', 'L'}, {'R', 'I', 'N'}, {'X', 'U', '9'}};
+  vector<vector<char>> data {{'a', 's', 'c'}, {'6', 'h', 'p'}, {'f', '3', 'x'}, {'n', 'r', '1'}, {'u', '9', 'j'}, {'t', 'i', '7'}};
   vector<int> buckets_index;
 
   BucketContext context = {
@@ -21,8 +21,8 @@ int main(){
 
   TaskManager::swapBucket(&context);
 
-  Sort::printVector2d(data);
-  Sort::printVector(buckets_index);
+  Util::printVector2d(data);
+  Util::printVector(buckets_index);
 
   // int a = 1;
   // int& c = a;

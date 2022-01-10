@@ -18,22 +18,6 @@ public:
     }
   }
 
-  static void printVector(vector<int> data){
-    for (const auto& elem : data) {
-      cout << elem <<  ", ";
-    }
-    cout << endl;
-  }
-
-  static void printVector2d(vector<vector<char>> data) {
-    for (const auto& row : data) {
-      for (const auto& elem : row) {
-        cout << elem <<  ", ";
-      }
-      cout << endl;
-    }
-  }
-
 private:
   static int partition(vector<vector<char>> &data, int column, int low, int high) {
     int pivot = data[high][column];
