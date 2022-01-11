@@ -20,15 +20,16 @@ public:
 
 private:
   static int partition(vector<vector<char>> &data, int column, int low, int high) {
-    int pivot = data[high][column];
+    const int pivot = data[high][column];
     int i = (low - 1);
 
-    for (int j = low; j <= high- 1; j++){
+    for (auto j = low; j <= high - 1; j++){
       if (data[j][column] <= pivot){
         swap(data[++i], data[j]);
       }
     }
     swap(data[++i], data[high]);
+
     return i;
   }
 

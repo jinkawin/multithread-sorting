@@ -44,6 +44,8 @@ public:
     vector<vector<char>> &data = *(context->data);
     vector<int> &buckets_index = *(context->buckets_index);
 
+    buckets_index.clear();
+
     int column = context->sorting_column;
     uint8_t characters_size = TOTAL_CHAR/(context->total_threads - 1);
     int runner = 0;

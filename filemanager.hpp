@@ -10,6 +10,8 @@ using namespace std;
 #include <string>
 #include <vector>
 
+using namespace std;
+
 class FileManager {
 public:
   static void read(string file_name, vector<vector<char>> &data) {
@@ -17,8 +19,8 @@ public:
     ifstream infile(file_name);
 
     while (getline (infile, line)) {
-      std::stringstream ss {line};
-      std::vector<char> row {};
+      stringstream ss {line};
+      vector<char> row {};
       char charactor;
 
       while (ss >> charactor)
@@ -26,6 +28,21 @@ public:
 
       data.push_back(row);
     }
+
+    infile.close();
+  }
+
+  static void write(string file_name, vector<vector<char>> &data) {
+    ofstream outfile(file_name);
+
+    for (const auto& row : data) {
+      for (const auto& elem : row) {
+        outfile.write((char*) &elem, sizeof(elem));
+      }
+      outfile << endl;
+    }
+
+    outfile.close();
   }
 };
 

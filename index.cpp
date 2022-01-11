@@ -12,13 +12,16 @@ using namespace std;
 int main() {
   // Thread initialisation
   volatile uint8_t running_threads = 0;
-  uint8_t total_threads = 4;
+  unsigned int total_threads = thread::hardware_concurrency();
   pthread_mutex_t running_mutex = PTHREAD_MUTEX_INITIALIZER;
 
   // Data Initialisation
   vector<int> buckets_index;
   vector<vector<char>> data;
-  FileManager::read("test.txt", data);
+  FileManager::read("test1.txt", data);
+
+  // A number of cores cannot exceed a number of data's row
+  total_threads = (total_threads < data.size()) ? total_threads : data.size();
 
   // Initial Bucket index
   uint64_t bucket_size = data.size() / total_threads;
@@ -26,6 +29,7 @@ int main() {
     buckets_index.push_back(i);
   }
 
+  // Sorting
   for(int i = data[0].size()-1; i >= 0; i--) {
     SortContext sortContext = {
       &data,
@@ -46,6 +50,7 @@ int main() {
     TaskManager::swapBucket(&bucketContext);
   }
 
+  Util::printVector(buckets_index);
   // Post-process
   SortContext sortContext = {
     &data,
@@ -57,7 +62,8 @@ int main() {
   };
   TaskManager::localSort(&sortContext);
 
-  cout << "All threads are finished!" << endl;
+  FileManager::write("out.txt", data);
+  cout << "finished" << endl;
 
   pthread_exit(NULL);
 

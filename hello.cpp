@@ -10,7 +10,7 @@ using namespace std;
 int main(){
   vector<vector<char>> data;
 
-  FileManager::read("test.txt", data);
+  FileManager::read("test3.txt", data);
 
-  Util::printVector2d(data);
+  FileManager::write("out.txt", data);
 }
