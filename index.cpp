@@ -8,15 +8,11 @@
 #include "util.hpp"
 
 using namespace std;
-using chrono::high_resolution_clock;
-using chrono::duration_cast;
-using chrono::duration;
-using chrono::milliseconds;
 
 int main() {
   // Thread initialisation
   volatile uint8_t running_threads = 0;
-  uint8_t total_threads = 3;
+  uint8_t total_threads = 4;
   pthread_mutex_t running_mutex = PTHREAD_MUTEX_INITIALIZER;
 
   // Data Initialisation
@@ -60,8 +56,8 @@ int main() {
     0
   };
   TaskManager::localSort(&sortContext);
+
   cout << "All threads are finished!" << endl;
-  Util::printVector2d(data);
 
   pthread_exit(NULL);
 
