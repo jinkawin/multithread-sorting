@@ -1,10 +1,10 @@
+#ifndef CONTEXT_HPP
+#define CONTEXT_HPP
+
 #include <vector>
 #include <pthread.h>
 
 using namespace std;
-
-#ifndef CONTEXT_HPP
-#define CONTEXT_HPP
 
 struct SortContext {
   vector<vector<char>> *data;

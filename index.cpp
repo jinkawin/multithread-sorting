@@ -2,11 +2,16 @@
 #include <thread>
 #include <vector>
 
+#include "filemanager.hpp"
 #include "taskmanager.hpp"
 #include "context.hpp"
 #include "util.hpp"
 
 using namespace std;
+using chrono::high_resolution_clock;
+using chrono::duration_cast;
+using chrono::duration;
+using chrono::milliseconds;
 
 int main() {
   // Thread initialisation
@@ -15,8 +20,9 @@ int main() {
   pthread_mutex_t running_mutex = PTHREAD_MUTEX_INITIALIZER;
 
   // Data Initialisation
-  vector<vector<char>> data {{'2', 's', 'c'}, {'6', 'h', 'p'}, {'f', '3', 'x'}, {'a', 'r', '1'}, {'u', '9', 'j'}, {'t', 'i', '7'}};
   vector<int> buckets_index;
+  vector<vector<char>> data;
+  FileManager::read("test.txt", data);
 
   // Initial Bucket index
   uint64_t bucket_size = data.size() / total_threads;

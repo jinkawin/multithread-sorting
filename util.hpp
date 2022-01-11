@@ -1,10 +1,10 @@
+#ifndef UTIL_HPP
+#define UTIL_HPP
+
 #include <string>
 #include <iostream>
 
 using namespace std;
-
-#ifndef UTIL_HPP
-#define UTIL_HPP
 
 class Util {
 public:

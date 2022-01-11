@@ -1,10 +1,10 @@
+#ifndef SORT_HPP
+#define SORT_HPP
+
 #include <string>
 #include <iostream>
 
 using namespace std;
-
-#ifndef SORT_HPP
-#define SORT_HPP
 
 class Sort {
 public:

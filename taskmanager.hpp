@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <thread>
+#include <chrono>
 
 #include "context.hpp"
 #include "sort.hpp"
@@ -35,7 +36,7 @@ public:
 
     // Wait all threads
     while(context->running_threads > 0){
-      sleep(1);
+      this_thread::sleep_for(chrono::milliseconds(10));
     }
   }
 
