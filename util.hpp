@@ -20,7 +20,7 @@ public:
   static void printVector2d(vector<vector<char>> data) {
     for (const auto& row : data) {
       for (const auto& elem : row) {
-        cout << elem <<  ", ";
+        cout << elem;
       }
       cout << endl;
     }

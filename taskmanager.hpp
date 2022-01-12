@@ -11,7 +11,7 @@ using namespace std;
 class TaskManager {
 private:
   static const char FIRST_CHAR = 'a';
-  static const uint8_t TOTAL_CHAR = 26; // a to z
+  static const uint16_t TOTAL_CHAR = 26; // a to z
   inline static uint8_t counter = 0;
 
 public:
@@ -47,10 +47,10 @@ public:
     buckets_index.clear();
 
     int column = context->sorting_column;
-    uint8_t characters_size = TOTAL_CHAR/(context->total_threads - 1);
+    uint16_t characters_size = TOTAL_CHAR/(context->total_threads - 1);
     int runner = 0;
 
-    for(int i = 0; i < context->total_threads; i++) {
+    for(auto i = 0; i < context->total_threads; i++) {
       int start_char = (i == 0) ? '0' : FIRST_CHAR + ((i - 1) * characters_size);
       int end_char = (i == 0) ? '9' : (FIRST_CHAR + ((i * characters_size)) - 1);
 

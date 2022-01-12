@@ -26,7 +26,7 @@ int main() {
   int last_index;
   for(int i = 0; i < data[0].size(); i++) {
     if(data[0][i] == ',') {
-      last_index = i;
+      last_index = i-1;
       break;
     }
   }
@@ -39,10 +39,10 @@ int main() {
   for(uint64_t i = bucket_size-1; i < data.size(); i = i+bucket_size) {
     buckets_index.push_back(i);
   }
+  buckets_index[buckets_index.size()-1] = data.size()-1;
 
   // Sorting
-  unsigned int sorting_column_size = last_index - START_INDEX;
-  for(int i = sorting_column_size; i >= START_INDEX; i--) {
+  for(int i = last_index; i >= START_INDEX; i--) {
     SortContext sortContext = {
       &data,
       &buckets_index,
@@ -69,12 +69,11 @@ int main() {
     running_mutex,
     running_threads,
     total_threads,
-    0
+    START_INDEX
   };
   TaskManager::localSort(&sortContext);
 
   FileManager::write("out.txt", data);
-  cout << "finished" << endl;
 
   pthread_exit(NULL);
 
