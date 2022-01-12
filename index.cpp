@@ -10,6 +10,8 @@
 using namespace std;
 
 int main() {
+  const int START_INDEX = 4; // start after "USR:"
+
   // Thread initialisation
   volatile uint8_t running_threads = 0;
   unsigned int total_threads = thread::hardware_concurrency();
@@ -19,6 +21,15 @@ int main() {
   vector<int> buckets_index;
   vector<vector<char>> data;
   FileManager::read("test1.txt", data);
+
+  // Find last position of the first column (by finging the first comma)
+  int last_index;
+  for(int i = 0; i < data[0].size(); i++) {
+    if(data[0][i] == ',') {
+      last_index = i;
+      break;
+    }
+  }
 
   // A number of cores cannot exceed a number of data's row
   total_threads = (total_threads < data.size()) ? total_threads : data.size();
@@ -30,7 +41,8 @@ int main() {
   }
 
   // Sorting
-  for(int i = data[0].size()-1; i >= 0; i--) {
+  unsigned int sorting_column_size = last_index - START_INDEX;
+  for(int i = sorting_column_size; i >= START_INDEX; i--) {
     SortContext sortContext = {
       &data,
       &buckets_index,
@@ -50,7 +62,6 @@ int main() {
     TaskManager::swapBucket(&bucketContext);
   }
 
-  Util::printVector(buckets_index);
   // Post-process
   SortContext sortContext = {
     &data,
@@ -62,7 +73,7 @@ int main() {
   };
   TaskManager::localSort(&sortContext);
 
-  FileManager::write("out.txt", data);
+  // FileManager::write("out.txt", data);
   cout << "finished" << endl;
 
   pthread_exit(NULL);
