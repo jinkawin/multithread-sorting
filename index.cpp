@@ -20,7 +20,7 @@ int main() {
   // Data Initialisation
   vector<int> buckets_index;
   vector<vector<char>> data;
-  FileManager::read("test1.txt", data);
+  FileManager::read("reversed_users_10.csv", data);
 
   // Find last position of the first column (by finging the first comma)
   int last_index;
@@ -35,11 +35,13 @@ int main() {
   total_threads = (total_threads < data.size()) ? total_threads : data.size();
 
   // Initial Bucket index
-  uint64_t bucket_size = data.size() / total_threads;
-  for(uint64_t i = bucket_size-1; i < data.size(); i = i+bucket_size) {
-    buckets_index.push_back(i);
-  }
-  buckets_index[buckets_index.size()-1] = data.size()-1;
+  BucketContext bucketContext = {
+    &data,
+    &buckets_index,
+    total_threads,
+    START_INDEX
+  };
+  TaskManager::swapBucket(&bucketContext);
 
   // Sorting
   for(int i = last_index; i >= START_INDEX; i--) {
@@ -74,6 +76,8 @@ int main() {
   TaskManager::localSort(&sortContext);
 
   FileManager::write("out.txt", data);
+
+  Util::printVector2d(data);
 
   pthread_exit(NULL);
 
