@@ -10,7 +10,9 @@
 using namespace std;
 
 int main() {
-  const int START_INDEX = 4; // start after "USR:"
+  const unsigned int START_INDEX = 4; // start after "USR:"
+  const unsigned int ALLOC_ROW_SIZE = 10 * 1000;
+  const unsigned int ALLOC_COL_SIZE = 50;
 
   // Thread initialisation
   volatile uint8_t running_threads = 0;
@@ -19,12 +21,12 @@ int main() {
 
   // Data Initialisation
   vector<int> buckets_index;
-  vector<vector<char>> data;
-  FileManager::read("reversed_users_10.csv", data);
+  vector<vector<char>> data(ALLOC_ROW_SIZE, vector<char>(ALLOC_COL_SIZE));
+  FileManager::read("reversed_users_10k.csv", data);
 
   // Find last position of the first column (by finging the first comma)
   int last_index;
-  for(int i = 0; i < data[0].size(); i++) {
+  for(double i = 0; i < data[0].size(); i++) {
     if(data[0][i] == ',') {
       last_index = i-1;
       break;
@@ -76,8 +78,6 @@ int main() {
   TaskManager::localSort(&sortContext);
 
   FileManager::write("out.txt", data);
-
-  Util::printVector2d(data);
 
   pthread_exit(NULL);
 
