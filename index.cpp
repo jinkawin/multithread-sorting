@@ -73,7 +73,7 @@ int main() {
   };
   TaskManager::localSort(&sortContext);
 
-  // FileManager::write("out.txt", data);
+  FileManager::write("out.txt", data);
   cout << "finished" << endl;
 
   pthread_exit(NULL);
