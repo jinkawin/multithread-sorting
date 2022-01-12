@@ -22,7 +22,7 @@ int main() {
   // Data Initialisation
   vector<int> buckets_index;
   vector<vector<char>> data(ALLOC_ROW_SIZE, vector<char>(ALLOC_COL_SIZE));
-  FileManager::read("reversed_users_10k.csv", data);
+  FileManager::read("data/reversed_users_10k.csv", data);
 
   // Find last position of the first column (by finging the first comma)
   int last_index;
