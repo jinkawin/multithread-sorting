@@ -36,17 +36,16 @@ int main() {
   // A number of cores cannot exceed a number of data's row
   total_threads = (total_threads < data.size()) ? total_threads : data.size();
 
-  // Initial Bucket index
-  BucketContext bucketContext = {
-    &data,
-    &buckets_index,
-    total_threads,
-    START_INDEX
-  };
-  TaskManager::swapBucket(&bucketContext);
-
   // Sorting
   for(int i = last_index; i >= START_INDEX; i--) {
+    BucketContext bucketContext = {
+      &data,
+      &buckets_index,
+      total_threads,
+      i
+    };
+    TaskManager::swapBucket(&bucketContext);
+
     SortContext sortContext = {
       &data,
       &buckets_index,
@@ -56,26 +55,7 @@ int main() {
       i
     };
     TaskManager::localSort(&sortContext);
-
-    BucketContext bucketContext = {
-      &data,
-      &buckets_index,
-      total_threads,
-      i
-    };
-    TaskManager::swapBucket(&bucketContext);
   }
-
-  // Post-process
-  SortContext sortContext = {
-    &data,
-    &buckets_index,
-    running_mutex,
-    running_threads,
-    total_threads,
-    START_INDEX
-  };
-  TaskManager::localSort(&sortContext);
 
   FileManager::write("out.txt", data);
 
