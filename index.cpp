@@ -11,8 +11,8 @@ using namespace std;
 
 int main() {
   const unsigned int START_INDEX = 4; // start after "USR:"
-  const unsigned int ALLOC_ROW_SIZE = 10 * 1000;
-  const unsigned int ALLOC_COL_SIZE = 50;
+  const unsigned int ALLOC_ROW_SIZE = 10; // Reserve extra space for preventing "Segmentation fault: 11"
+  const unsigned int ALLOC_COL_SIZE = 10; // Reserve extra space for preventing "Segmentation fault: 11"
 
   // Thread initialisation
   volatile uint8_t running_threads = 0;
