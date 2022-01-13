@@ -28,7 +28,6 @@ public:
         row.push_back(charactor);
       }
 
-      // data.push_back(row);
       data[row_index++] = row;
     }
 
