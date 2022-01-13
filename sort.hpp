@@ -7,40 +7,35 @@
 using namespace std;
 
 class Sort {
+private:
+  vector<vector<char>> &data;
+
 public:
+  Sort(vector<vector<char>> &arr)
+    :data(arr) {}
 
-  static void quickSort(vector<vector<char>> &data, int column, int low, int high) {
+  void quickSort(int column, int low, int high) {
     if (low < high){
-      int mid = partition(data, column, low, high);
+      int mid = partition(column, low, high);
 
-      quickSort(data, column, low, mid - 1);
-      quickSort(data, column, mid + 1, high);
+      quickSort(column, low, mid - 1);
+      quickSort(column, mid + 1, high);
     }
   }
 
 private:
-  static int partition(vector<vector<char>> &data, int column, int low, int high) {
-    const int pivot = data[high][column];
+  int partition(int column, int low, int high) {
+    const int pivot = this->data[high][column];
     int i = (low - 1);
 
     for (auto j = low; j <= high - 1; j++){
-      if (data[j][column] <= pivot){
-        swap(data[++i], data[j]);
+      if (this->data[j][column] <= pivot){
+        swap(this->data[++i], this->data[j]);
       }
     }
-    swap(data[++i], data[high]);
+    swap(this->data[++i], this->data[high]);
 
     return i;
-  }
-
-  static vector<char> getColumn(vector<vector<char>> &data, int column){
-    vector<char> result;
-
-    for (const auto& row : data) {
-      result.push_back(row[column]);
-    }
-
-    return result;
   }
 };
 

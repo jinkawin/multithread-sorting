@@ -75,7 +75,8 @@ private:
     int start_idx = (thread_id ==  0) ? 0 : buckets_index[thread_id-1]+1;
     int last_idx = buckets_index[thread_id];
 
-    Sort::quickSort(*(context->data), context->sorting_column, start_idx, last_idx);
+    Sort sort(*(context->data));
+    sort.quickSort(context->sorting_column, start_idx, last_idx);
 
     // Post-process
     TaskManager::endThread(thread_id, context);
