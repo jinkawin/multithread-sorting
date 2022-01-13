@@ -29,7 +29,6 @@ public:
       }
 
       data.push_back(row);
-      // data[row_index++] = row;
     }
 
     infile.close();

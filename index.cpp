@@ -5,7 +5,6 @@
 #include "filemanager.hpp"
 #include "taskmanager.hpp"
 #include "context.hpp"
-#include "util.hpp"
 
 using namespace std;
 
@@ -22,12 +21,13 @@ int main() {
   // Data Initialisation
   vector<int> buckets_index;
   vector<vector<char>> data(ALLOC_ROW_SIZE, vector<char>(ALLOC_COL_SIZE));
-  FileManager::read("data/reversed_users_10k.csv", data);
+  FileManager::read("data/test1.txt", data);
 
   // Find last position of the first column (by finging the first comma)
   int last_index;
-  for(double i = 0; i < data[0].size(); i++) {
-    if(data[0][i] == ',') {
+  int sampling_index = ALLOC_ROW_SIZE + 1;
+  for(double i = 0; i < data[sampling_index].size(); i++) {
+    if(data[sampling_index][i] == ',') {
       last_index = i-1;
       break;
     }
