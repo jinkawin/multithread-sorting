@@ -5,18 +5,11 @@
 #include "filemanager.hpp"
 #include "taskmanager.hpp"
 #include "context.hpp"
-#include "util.hpp"
+#include "config.hpp"
 
 using namespace std;
 
 int main() {
-  const unsigned int START_INDEX = 4; // start after "USR:"
-
-  // Reserve extra space for preventing "Segmentation fault: 11"
-  // Number of ALLOC_ROW_SIZE = number of rows
-  const unsigned int ALLOC_ROW_SIZE = 10;
-  const unsigned int ALLOC_COL_SIZE = 100;
-
   // Thread initialisation
   volatile uint8_t running_threads = 0;
   unsigned int total_threads = thread::hardware_concurrency();
@@ -24,8 +17,8 @@ int main() {
 
   // Data Initialisationd
   vector<int> buckets_index;
-  vector<vector<char>> data(ALLOC_ROW_SIZE, vector<char>(ALLOC_COL_SIZE));
-  FileManager::read("data/reversed_users_10.csv", data);
+  vector<vector<char>> data(Config::ALLOC_ROW_SIZE, vector<char>(Config::ALLOC_COL_SIZE));
+  FileManager::read(Config::FILE_IN, data);
 
   // Find last position of the first column (by finging the first comma)
   int last_index;
@@ -38,7 +31,7 @@ int main() {
   }
 
   // Sorting
-  for(int i = last_index; i >= START_INDEX; i--) {
+  for(int i = last_index; i >= Config::START_INDEX; i--) {
     BucketContext bucketContext = {
       &data,
       &buckets_index,
@@ -58,7 +51,7 @@ int main() {
     TaskManager::localSort(&sortContext);
   }
 
-  FileManager::write("out.txt", data);
+  FileManager::write(Config::FILE_OUT, data);
 
   pthread_exit(NULL);
 
