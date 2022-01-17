@@ -5,6 +5,7 @@
 
 #include "context.hpp"
 #include "sort.hpp"
+#include "columnsort.hpp"
 
 using namespace std;
 
@@ -78,7 +79,9 @@ private:
     int64_t start_idx = (thread_id ==  0) ? 0 : buckets_index[thread_id-1]+1;
     int64_t last_idx = buckets_index[thread_id];
 
-    Sort::quickSort(*(context->data), context->sorting_column, start_idx, last_idx);
+    // Sort::quickSort(*(context->data), context->sorting_column, start_idx, last_idx);
+    ColumnSort::column = context->sorting_column;
+    ColumnSort::columnSort(*(context->data), start_idx, last_idx);
 
     // Post-process
     TaskManager::endThread(thread_id, context);

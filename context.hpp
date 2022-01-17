@@ -8,7 +8,7 @@ using namespace std;
 
 struct SortContext {
   vector<vector<char>> *data;
-  vector<int> *buckets_index; //store the last array's index of each bucket
+  vector<int64_t> *buckets_index; //store the last array's index of each bucket
   pthread_mutex_t &running_mutex;
   volatile uint8_t &running_threads;
   unsigned int total_threads;
@@ -17,7 +17,7 @@ struct SortContext {
 
 struct BucketContext {
   vector<vector<char>> *data;
-  vector<int> *buckets_index; //store the last array's index of each bucket
+  vector<int64_t> *buckets_index; //store the last array's index of each bucket
   unsigned int total_threads;
   int sorting_column;
 };

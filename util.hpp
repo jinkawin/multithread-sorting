@@ -9,7 +9,16 @@ using namespace std;
 class Util {
 public:
   template <typename T>
+  static void pritMatrix(vector<T> data){
+    for (const auto& row : data) {
+      for (const auto& elem : row) {
+        cout << elem << " ";
+      }
+      cout << endl;
+    }
+  }
 
+  template <typename T>
   static void printVector(vector<T> data){
     for (const auto& elem : data) {
       cout << elem <<  ", ";

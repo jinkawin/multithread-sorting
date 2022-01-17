@@ -18,7 +18,7 @@ public:
     string line {};
     ifstream infile(file_name);
 
-    int row_index = 0;
+    int64_t row_index = 0;
     while (getline (infile, line)) {
       stringstream ss {line};
       vector<char> row {};
