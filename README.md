@@ -59,4 +59,7 @@ vector<int> buckets_index { 2, 5, 7, 19 };
 The last row's index of the first bucket is 2, and the last row's index of the second bucket is 5.
 
 ## Local Sort
+Local sort is an sorting in each bucket. A thread will handle only one bucket. Local sort will swap rows in the bucket in ascending order by considering the position of the given column. The base of the local sort is a Quicksort
+
 ## Write File
+2-dimensions vector will be converted into a file. the first dimension of vector will be file's row and the second dimension of the vector will be column. File will be written sequentially.

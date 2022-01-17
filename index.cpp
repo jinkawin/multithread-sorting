@@ -16,7 +16,7 @@ int main() {
   pthread_mutex_t running_mutex = PTHREAD_MUTEX_INITIALIZER;
 
   // Data Initialisationd
-  vector<int> buckets_index;
+  vector<int64_t> buckets_index;
   vector<vector<char>> data(Config::ALLOC_ROW_SIZE, vector<char>(Config::ALLOC_COL_SIZE));
   FileManager::read(Config::FILE_IN, data);
 
@@ -49,6 +49,9 @@ int main() {
       i
     };
     TaskManager::localSort(&sortContext);
+
+    // Reset counter
+    TaskManager::counter = 0;
   }
 
   FileManager::write(Config::FILE_OUT, data);

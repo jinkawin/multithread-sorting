@@ -9,10 +9,12 @@
 using namespace std;
 
 class TaskManager {
+public:
+  inline static uint8_t counter = 0;
+
 private:
   static const char FIRST_CHAR = 'a';
   static const uint16_t TOTAL_CHAR = 26; // a to z
-  inline static uint8_t counter = 0;
 
 public:
   static void localSort(SortContext *context) {
@@ -42,26 +44,27 @@ public:
 
   static void swapBucket(BucketContext *context) {
     vector<vector<char>> &data = *(context->data);
-    vector<int> &buckets_index = *(context->buckets_index);
+    vector<int64_t> &buckets_index = *(context->buckets_index);
 
     buckets_index.clear();
 
     int column = context->sorting_column;
-    uint16_t characters_size = TOTAL_CHAR/(context->total_threads - 1);
-    int runner = 0;
+    int characters_size = TOTAL_CHAR/(context->total_threads - 1);
+    int64_t runner = 0;
 
     for(auto i = 0; i < context->total_threads; i++) {
       int start_char = (i == 0) ? '0' : FIRST_CHAR + ((i - 1) * characters_size);
       int end_char = (i == 0) ? '9' : (FIRST_CHAR + ((i * characters_size)) - 1);
 
-      for(int row = runner; row < data.size(); row++) {
+      for(int64_t row = runner; row < data.size(); row++) {
         if(data[row][column] >= start_char && data[row][column] <= end_char) {
           swap(data[row], data[runner]);
           runner++;
         }
       }
 
-      buckets_index.push_back(runner - 1); // minus 1 for changing position to index
+      int64_t index = runner == 0 ? 0 : runner - 1; // minus 1 for changing position to index
+      buckets_index.push_back(index);
     }
   }
 
@@ -71,12 +74,11 @@ private:
     SortContext *context = (struct SortContext*)data;
 
     /* Calculate calulation window */
-    vector<int> &buckets_index = *(context->buckets_index);
-    int start_idx = (thread_id ==  0) ? 0 : buckets_index[thread_id-1]+1;
-    int last_idx = buckets_index[thread_id];
+    vector<int64_t> &buckets_index = *(context->buckets_index);
+    int64_t start_idx = (thread_id ==  0) ? 0 : buckets_index[thread_id-1]+1;
+    int64_t last_idx = buckets_index[thread_id];
 
-    Sort sort(*(context->data));
-    sort.quickSort(context->sorting_column, start_idx, last_idx);
+    Sort::quickSort(*(context->data), context->sorting_column, start_idx, last_idx);
 
     // Post-process
     TaskManager::endThread(thread_id, context);
@@ -88,10 +90,5 @@ private:
     pthread_mutex_lock(&(context->running_mutex));
     context->running_threads--;
     pthread_mutex_unlock(&(context->running_mutex));
-
-    // Reset counter
-    if(thread_id == (context->total_threads - 1)) {
-      counter = 0;
-    }
   }
 };
