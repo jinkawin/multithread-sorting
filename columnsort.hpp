@@ -15,8 +15,7 @@ public:
 
 public:
   static void columnSort(vector<vector<char>>& data, uint64_t start_idx, uint64_t last_idx) {
-    const uint64_t alloc_size = last_idx - start_idx + 1;
-    vector<vector<char>> temp(alloc_size, vector<char>(Config::ALLOC_COL_SIZE));
+    vector<vector<char>> temp(Config::ALLOC_ROW_SIZE, vector<char>(Config::ALLOC_COL_SIZE));
     temp.assign(data.begin() + start_idx, data.begin() + last_idx + 1);
 
     sort(temp.begin(), temp.end(), ColumnSort::compareColumn);
