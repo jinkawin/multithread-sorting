@@ -56,6 +56,10 @@ int main() {
 
   FileManager::write(Config::FILE_OUT, data);
 
+  // Free up memory
+  data.erase(data.begin(), data.end());
+  data.shrink_to_fit();
+
   pthread_exit(NULL);
 
   return 0;
