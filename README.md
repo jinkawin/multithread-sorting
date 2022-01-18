@@ -1,29 +1,8 @@
-# Prerequisite
-- GCC Complier
-
-# How to run
-
-
-```sh
-cd {FOLDER} && g++ -std=c++17 index.cpp -o index && ./index
-```
-
-# Configuration
-
-Configuaration can be done in `config.hpp` file
-|Varaiable       |Description                                         |
-|----------------|----------------------------------------------------|
-|START_INDEX     |The first index of CUID                             |
-|ALLOC_ROW_SIZE  |Number of file's row. Used for vector's allocation  |
-|ALLOC_COL_SIZE  |The lenght of each row. Used for vector's allocation|
-|FILE_IN         |The name of an input file with extension            |
-|FILE_OUT        |The name of an output file with extension           |
-
-# How it works
-This programme is divided into 4 parts: Read File, Swap Bucket, Local Sort, and Write File.
+# Overview
+This programme is written for sorting a file by using a multithreading technique. This programme uses two sorting techniques: the Bucket sort and any stable sort that can sort in a specific column. This programme has four processes: file reading, buckets swapping, local sorting, and file writing.
 
 ## Read File
-File will be read from the given configuration. File will be converted into 2-dimensions array. The first dimension represents rows or line of file. The second dimension represents character in each line.
+The first process is reading a file. Data will be read and buffered into a two-dimensional vector. The first dimension represents rows or lines of the file. The second dimension represents characters in each line. Vector is allocated in advance, and the allocation size roughly is the number of rows in the file.
 
 For example, given file input.csv
 
@@ -40,9 +19,9 @@ will be converted to
 ```
 
 ## Swap Bucket
-After file was read and converted into the 2-dimensions vector, each row of vector will be partitioned into buckets by considering iteration of each column. The first iteration, the last index of CUID will be considered for distributing into buckets. Also, for the second iteration, the second last index of CUID will be considered.
+After the file was read and converted into the two-dimensional vector, each row of the vector will be partitioned into buckets by considering the iteration of each column. The first iteration, the last index of CUID, will be regarded for distributing into buckets. Also, the second last index of CUID will be considered for the second iteration.
 
-A number of buckets will be considered by a number of threads which will equal to the number of cores. The first bucket will contain only nunber 0-9, and the others will equally contain 26/(number_of_bucket - 1).
+The number of buckets will be considered by the number of threads equal to the cores. The first bucket will contain only numbers 0-9, and the others will equally have 26/(number_of_bucket - 1).
 
 For example, if there are 4 cores, there will be 4 buckets:
 1. The first bucket contains `0-9`
@@ -50,7 +29,7 @@ For example, if there are 4 cores, there will be 4 buckets:
 3. The third bucket contains `i-p`
 4. The last one contains `q-z`
 
-To optimise a memory usage, a secondary index is introduced which name is `buckets_index`. `buckets_index` is an array that point to the last index of each bucket.
+A secondary index is introduced to optimise a memory usage, which is `buckets_index`. `buckets_index` is an array that points to the last index of each bucket.
 
 For example,
 ```cpp
@@ -59,7 +38,29 @@ vector<int> buckets_index { 2, 5, 7, 19 };
 The last row's index of the first bucket is 2, and the last row's index of the second bucket is 5.
 
 ## Local Sort
-Local sort is an sorting in each bucket. A thread will handle only one bucket. Local sort will swap rows in the bucket in ascending order by considering the position of the given column. The base of the local sort is a Quicksort
+Local sort is an element sorting in the bucket by swapping rows in the bucket in ascending order. Each thread will process only one bucket. After characters are distributed into buckets, threads will be mapped to a bucket. Then, threads will start to sort concerning an iteration number. For example, the first iteration will sort the last position of CUID.
 
 ## Write File
-2-dimensions vector will be converted into a file. the first dimension of vector will be file's row and the second dimension of the vector will be column. File will be written sequentially.
+The programme will convert a two-dimensional vector into a file. The first dimension of the vector will be the file's row, and the second dimension of the vector will be a column. The file will be written sequentially.
+
+# Prerequisite
+- C++ 17
+- GCC Compiler
+- 500MB of Memory (at least for 1m rows)
+
+# How to run
+
+```sh
+cd {FOLDER} && g++ -std=c++17 index.cpp -o index && ./index
+```
+
+# Configuration
+
+Configuaration can be done in `config.hpp` file
+|Varaiable       |Description                                           |
+|----------------|------------------------------------------------------|
+|START_INDEX     |The first index of CUID                               |
+|ALLOC_ROW_SIZE  |A number of file's row. Used for vector's allocation  |
+|ALLOC_COL_SIZE  |The length of each row. Used for vector's allocation  |
+|FILE_IN         |The name of an input file with extension              |
+|FILE_OUT        |The name of an output file with extension             |
