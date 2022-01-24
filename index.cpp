@@ -12,7 +12,8 @@ using namespace std;
 int main() {
   // Thread initialisation
   volatile uint8_t running_threads = 0;
-  unsigned int total_threads = thread::hardware_concurrency();
+  // unsigned int total_threads = thread::hardware_concurrency();
+  unsigned int total_threads = 2;
   pthread_mutex_t running_mutex = PTHREAD_MUTEX_INITIALIZER;
 
   // Data Initialisationd
