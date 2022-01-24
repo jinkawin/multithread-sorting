@@ -74,12 +74,18 @@ private:
     int thread_id = counter++;
     SortContext *context = (struct SortContext*)data;
 
+    unsigned int microsecond = 500000;
+    usleep((thread_id+1) * microsecond);
+
     /* Calculate calulation window */
     vector<int64_t> &buckets_index = *(context->buckets_index);
-    int64_t start_idx = (thread_id ==  0) ? 0 : buckets_index[thread_id-1]+1;
+    int64_t start_idx = 0;
+    if(thread_id !=  0) {
+      const int64_t previous_index = buckets_index[thread_id-1];
+      start_idx = (previous_index == 0) ? previous_index : previous_index+1;
+    }
     int64_t last_idx = buckets_index[thread_id];
 
-    // Sort::quickSort(*(context->data), context->sorting_column, start_idx, last_idx);
     ColumnSort::column = context->sorting_column;
     ColumnSort::columnSort(*(context->data), start_idx, last_idx);
 
