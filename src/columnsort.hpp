@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <algorithm>
 
 #include "util.hpp"
 #include "config.hpp"
