@@ -28,7 +28,13 @@ public:
 
 private:
   static bool compareColumn(const vector<char>& v1, const vector<char>& v2) {
-    return v1[ColumnSort::column] < v2[ColumnSort::column];
+    for(int i=ColumnSort::column; i<v1.size(); i++) {
+      if(v1[i] != v2[i]) {
+        return v1[i] < v2[i];
+      }
+    }
+
+    return false;
   }
 };
 
