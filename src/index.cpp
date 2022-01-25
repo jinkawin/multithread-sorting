@@ -6,6 +6,7 @@
 #include "taskmanager.hpp"
 #include "context.hpp"
 #include "config.hpp"
+#include "util.hpp"
 
 using namespace std;
 
@@ -13,7 +14,7 @@ int main() {
   // Thread initialisation
   volatile uint8_t running_threads = 0;
   // unsigned int total_threads = thread::hardware_concurrency();
-  unsigned int total_threads = 2;
+  unsigned int total_threads = 4;
   pthread_mutex_t running_mutex = PTHREAD_MUTEX_INITIALIZER;
 
   // Data Initialisationd
@@ -24,7 +25,7 @@ int main() {
   // Find last position of the first column (by finging the first comma)
   int last_index;
   int sampling_index = 0;
-  for(double i = 0; i < data[sampling_index].size(); i++) {
+  for(double i = Config::START_INDEX; i <= data[sampling_index].size(); i++) {
     if(data[sampling_index][i] == ',') {
       last_index = i-1;
       break;
