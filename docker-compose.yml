@@ -1,0 +1,7 @@
+version: '3.8'
+services:
+  multithread_sort:
+    build: ./
+    image: multithread-sort
+    volumes:
+      - ./output/:/usr/src/output/

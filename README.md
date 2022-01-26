@@ -49,11 +49,20 @@ The programme will convert a two-dimensional vector into a file. The first dimen
 - 500MB of Memory (at least for 1m rows)
 
 # How to run
+1. Use terminal
+```sh
+g++ -std=c++17 ./src/index.cpp -pthread -o ./.src/index && ./.src/index
+```
+2. Use shell script
 
 ```sh
-cd {FOLDER} && g++ -std=c++17 index.cpp -o index && ./index
+./run.sh
 ```
+3. Use docker-compose
 
+```sh
+docker-compose up
+```
 # Configuration
 
 Configuaration can be done in `config.hpp` file
